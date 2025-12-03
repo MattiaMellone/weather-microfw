@@ -19,7 +19,7 @@ The application itself is intentionally minimal (fetches weather data from a pub
                               │ /weather/fetch/
                               ▼
                     ┌──────────────────┐
-                    │   Django 5 API   │
+                    │   Django 5.2 API   │
                     └───────┬──────────┘
                             ▼
                    ┌───────────────────┐
