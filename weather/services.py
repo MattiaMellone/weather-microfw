@@ -1,4 +1,3 @@
-# weather/services.py
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -11,18 +10,21 @@ from .models import WeatherSample
 
 
 class CurrentWeatherPayload(TypedDict):
+    """Type definition for the current weather section of the API response."""
     temperature: float
     windspeed: float
     time: str  # ISO8601
 
 
 class OpenMeteoResponse(TypedDict):
+    """Type definition for the complete Open-Meteo API response."""
     latitude: float
     longitude: float
     current_weather: CurrentWeatherPayload
 
 
 class AsyncWeatherClient(Protocol):
+    """Protocol defining the interface for asynchronous weather clients."""
     async def get_current(self, lat: float, lon: float) -> OpenMeteoResponse: ...
 
 
@@ -31,9 +33,27 @@ ParamsValue = Union[str, float]
 
 @dataclass
 class AsyncOpenMeteoClient:
+    """
+    Asynchronous HTTP client for the Open-Meteo weather API.
+    
+    Provides typed access to current weather data for specified coordinates.
+    """
     base_url: str = "https://api.open-meteo.com/v1/forecast"
 
     async def get_current(self, lat: float, lon: float) -> OpenMeteoResponse:
+        """
+        Fetch current weather data for the given coordinates.
+        
+        Args:
+            lat: Latitude of the location
+            lon: Longitude of the location
+            
+        Returns:
+            Typed weather data response from the API
+            
+        Raises:
+            httpx.HTTPStatusError: If the API returns a non-2xx status code
+        """
         params: dict[str, ParamsValue] = {
             "latitude": lat,
             "longitude": lon,
@@ -47,6 +67,11 @@ class AsyncOpenMeteoClient:
 
 
 def _parse_iso8601(dt: str) -> datetime:
+    """
+    Parse an ISO8601 datetime string and ensure it has UTC timezone.
+    
+    If the input has no timezone info, UTC is assumed.
+    """
     d = datetime.fromisoformat(dt)
     if d.tzinfo is None:
         d = d.replace(tzinfo=timezone.utc)
@@ -57,6 +82,16 @@ def store_sample_from_payload(
     payload: OpenMeteoResponse,
     city: str,
 ) -> WeatherSample:
+    """
+    Create and persist a WeatherSample from an API response.
+    
+    Args:
+        payload: The weather data from the API
+        city: Name of the city for this sample
+        
+    Returns:
+        The created WeatherSample instance
+    """
     cw = payload["current_weather"]
 
     sample = WeatherSample.objects.create(

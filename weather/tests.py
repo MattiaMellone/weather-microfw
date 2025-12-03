@@ -1,3 +1,6 @@
-from django.test import TestCase
+"""
+Unit tests for the weather application.
 
-# Create your tests here.
+Tests cover the weather API endpoints, service layer, and Celery tasks.
+"""
+from django.test import TestCase

@@ -1,3 +1,8 @@
+"""
+URL configuration for the weather application.
+
+Defines endpoints for fetching weather data and retrieving the latest sample.
+"""
 from django.urls import path
 from .views import enqueue_weather_fetch, latest_weather
 
