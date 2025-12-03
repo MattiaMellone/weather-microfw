@@ -10,7 +10,11 @@ def enqueue_weather_fetch(request: HttpRequest) -> JsonResponse:
     """
     Enqueue an asynchronous weather fetch task for the specified location.
     
-    Returns HTTP 202 to indicate the fetch has been scheduled for background processing.
+    Args:
+        request: HTTP request containing city, lat, and lon query parameters
+    
+    Returns:
+        JSON response with HTTP 202 indicating the fetch has been scheduled
     """
     city = request.GET.get("city", "Bari")
     lat_str = request.GET.get("lat", "41.12")
@@ -37,7 +41,11 @@ def latest_weather(request: HttpRequest) -> JsonResponse:
     """
     Retrieve the most recent weather sample from the database.
     
-    Returns HTTP 404 if no samples exist, otherwise returns the latest observation.
+    Args:
+        request: HTTP request object (no parameters used)
+    
+    Returns:
+        JSON response with weather data (HTTP 200) or error message (HTTP 404)
     """
     sample = WeatherSample.objects.order_by("-observed_at").first()
     if sample is None:

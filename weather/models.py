@@ -21,7 +21,7 @@ class WeatherSample(models.Model):
 
     class Meta:
         ordering = ["-observed_at"]
-        
+
     def __str__(self) -> str:
         """Return a human-readable representation of the weather sample."""
         return f"{self.city} @ {self.observed_at}: {self.temperature_c}°C"
