@@ -1,5 +1,7 @@
 # 🌦️ Weather Microframework
 
+![CI/CD Pipeline](https://github.com/MattiaMellone/weather-microfw/actions/workflows/ci.yml/badge.svg)
+
 This project was created as a **personal technical experiment** to evaluate, in practice:
 
 * the usefulness of **uv** as an environment and dependency manager
