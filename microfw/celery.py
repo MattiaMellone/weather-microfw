@@ -1,4 +1,8 @@
-# microfw/celery.py
+"""
+Celery configuration for the microfw project.
+
+Sets up the Celery app with Django settings integration and automatic task discovery.
+"""
 from __future__ import annotations
 
 import os
