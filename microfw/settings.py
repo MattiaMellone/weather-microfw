@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = "django-insecure-q-@3i)-g8c8$&cof7d)ph8j=0hrn9vppr*5n_nycoxxudns^33
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 
 # Application definition
@@ -75,8 +76,12 @@ WSGI_APPLICATION = "microfw.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "weatherdb",
+        "USER": "weather",
+        "PASSWORD": "weather",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
@@ -121,3 +126,18 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/1"
+
+CELERY_TIMEZONE = "Europe/Rome"
+CELERY_ENABLE_UTC = True
+
+CELERY_BEAT_SCHEDULE = {
+    "fetch_bari_weather_every_10_minutes": {
+        "task": "weather.tasks.fetch_weather_task",
+        "schedule": 600,
+        "args": ("Bari", 41.12, 16.87),
+    },
+}

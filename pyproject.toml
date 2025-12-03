@@ -13,3 +13,28 @@ dependencies = [
     "psycopg2-binary>=2.9.11",
     "redis>=7.1.0",
 ]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main"]
+strict = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_unused_ignores = true
+warn_return_any = true
+implicit_reexport = true
+
+disable_error_code = ["untyped-decorator"]
+
+files = ["microfw", "weather"]
+
+[tool.django-stubs]
+django_settings_module = "microfw.settings"
+
+[[tool.mypy.overrides]]
+module = "celery"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "celery.*"
+ignore_missing_imports = true
